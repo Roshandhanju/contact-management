@@ -20,6 +20,11 @@ class App extends React.Component {
     console.log(this.state.count);
     this.setState({ count: this.state.count + 1 });
   };
+  handleDecrement = () => {
+    console.log("click");
+    console.log(this.state.count);
+    this.setState({ count: this.state.count - 1 });
+  };
 
   submit = data => {
     console.log(data);
@@ -31,6 +36,9 @@ class App extends React.Component {
       return contact.id !== id;
     });
     this.setState({ contact: filterData });
+  };
+  handleFormData = data => {
+    this.setState({ contact: [data, ...this.state.contact] });
   };
   render() {
     let contact = [
@@ -50,7 +58,14 @@ class App extends React.Component {
         <button type="button" onClick={this.handleIncrement}>
           Increment
         </button>
-        <Contact contact={contact} />
+        <button
+          disabled={this.state.count === 0 ? true : false}
+          type="button"
+          onClick={this.handleDecrement}
+        >
+          Decrement
+        </button>
+        <Contact formData={this.handleFormData} contact={contact} />
         {this.state.contact.map((data, index) => {
           return <ContactList delete={this.handleDelete} contact={data} />;
         })}
