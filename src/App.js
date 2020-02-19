@@ -38,7 +38,19 @@ class App extends React.Component {
     this.setState({ contact: filterData });
   };
   handleFormData = data => {
-    this.setState({ contact: [data, ...this.state.contact] });
+    let id = this.state.contact.length + 1;
+    this.setState({ contact: [{ ...data, id: id }, ...this.state.contact] });
+  };
+  handleEdit = data => {
+    console.log(data);
+    let editedData = this.state.contact.map(function(contact) {
+      if (contact.id === data.id) {
+        return data;
+      }
+      return contact;
+    });
+    console.log(editedData);
+    this.setState({ contact: editedData });
   };
   render() {
     let contact = [
@@ -67,7 +79,13 @@ class App extends React.Component {
         </button>
         <Contact formData={this.handleFormData} contact={contact} />
         {this.state.contact.map((data, index) => {
-          return <ContactList delete={this.handleDelete} contact={data} />;
+          return (
+            <ContactList
+              edit={this.handleEdit}
+              delete={this.handleDelete}
+              contact={data}
+            />
+          );
         })}
         <Title item={this.submit} />
       </div>

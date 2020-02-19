@@ -6,7 +6,8 @@ class Contact extends React.Component {
     this.state = {
       name: "",
       email: "",
-      phone: ""
+      phone: "",
+      error: {}
     };
   }
   handleChange = e => {
@@ -16,7 +17,17 @@ class Contact extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     console.log("Submit");
-    this.props.formData(this.state);
+    const { name, email, phone } = this.state;
+    if (name === "") {
+      this.setState({ error: { name: "Please enter ypur Name" } });
+    } else if (email === "") {
+      this.setState({ error: { email: "please enter your email" } });
+    } else if (phone === "") {
+      this.setState({ error: { phone: "please enter your phone" } });
+    } else {
+      this.props.formData(this.state);
+      this.setState({ name: "", phone: "", email: "", error: {} });
+    }
   };
   render() {
     return (
@@ -31,10 +42,12 @@ class Contact extends React.Component {
               <input
                 type="text"
                 onChange={this.handleChange}
+                value={this.state.name}
                 placeholder="Name"
                 name="name"
                 className="form-control"
               />
+              <span className="text-danger">{this.state.error.name}</span>
             </div>
             <div className="form-group">
               <label htmlFor="Email">Email</label>
@@ -43,8 +56,10 @@ class Contact extends React.Component {
                 placeholder="Email"
                 className="form-control"
                 name="email"
+                value={this.state.email}
                 onChange={this.handleChange}
               />
+              <span className="text-danger">{this.state.error.email}</span>
             </div>
             <div className="form-group">
               <label htmlFor="Phone">Phone</label>
@@ -53,8 +68,10 @@ class Contact extends React.Component {
                 placeholder="Phone"
                 className="form-control"
                 name="phone"
+                value={this.state.phone}
                 onChange={this.handleChange}
               />
+              <span className="text-danger">{this.state.error.phone}</span>
             </div>
             <button className="btn btn-primary btn-sm" type="submit">
               Submit
